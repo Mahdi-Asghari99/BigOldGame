@@ -16,10 +16,10 @@ public class Map {
             {1, 1, 1, 1, 1, 2, 0, 0}
     } ;
     private static final int[] temperatures = {
-            14, 13, 12, 11, 10, 10,
-            11, 12, 13, 18, 26, 32,
-            34, 36, 38, 36, 32, 28,
-            24, 18, 18, 17, 16, 15
+            15, 14, 13, 12, 11, 10,
+            11, 12, 15, 16, 18, 26,
+            32, 34, 36, 38, 36, 32,
+            28, 24, 18, 18, 17, 16,
     }; // 0h to 23h
     public int[] startTile = new int[]{0,0};
     public int[] goalTile = new int[]{7,7};
