@@ -32,14 +32,14 @@ public class Player {
     }
 
     private void updateWater(int time, int temp) {
-        if(!isNight(time) && temp > TEMP_THRESHOLD_OF_WATER_LOSS) {
+        if(!isNight(time) && temp >= TEMP_THRESHOLD_OF_WATER_LOSS) {
             water -= (temp - TEMP_THRESHOLD_OF_WATER_LOSS) * WATER_LOSS_UNIT + BASE_WATER_LOSS;
         }
     }
 
     private void updateBodyTemp(int time, int temp) {
-        if(isNight(time) && temp < TEMP_THRESHOLD_OF_BODYTEMP_LOSS) {
-
+        if(isNight(time) && temp <= TEMP_THRESHOLD_OF_BODYTEMP_LOSS) {
+            bodyTemp -= (TEMP_THRESHOLD_OF_BODYTEMP_LOSS - temp) * HOURLY_TEMP_LOSS_INCREASE + BASE_TEMP_LOSS;
         }
     }
 
