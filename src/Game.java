@@ -22,8 +22,8 @@ public class Game {
         CMD2STEP.put("E", 2);
         CMD2STEP.put("W", 3);
     }
-    private static final int START_TIME = 9;
-    private static final int TOTAL_TIME = 72;
+    private static final int START_TIME = 9; // 9AM clock
+    private static final int TOTAL_TIME = 72; // max lasting time of game.
     private int elapse = 0;
     private int y, x;
     private int prevY, prevX;

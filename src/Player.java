@@ -20,7 +20,8 @@ public class Player {
         bag = new Bag();
         bag.addItem("Knife", new Knife());
         bag.addItem("Bottle", new Bottle());
-        bag.addItem("Branch", new Branch());
+        bag.addItem("Branch", new Branch()); // be more friendly to the player.
+        // with 3 branches at start
     }
 
     public boolean isAlive() {
