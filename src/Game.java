@@ -5,6 +5,13 @@ public class Game {
     private Map map;
     private Player player;
 
+    private static final int[] temperatures = {
+            15, 14, 13, 12, 11, 10,
+            11, 12, 15, 16, 18, 26,
+            32, 34, 36, 38, 36, 32,
+            28, 24, 18, 18, 17, 16,
+    }; // 0h to 23h
+
     private static final String YES = "YES";
     private static final String NO = "NO";
 
@@ -89,7 +96,11 @@ public class Game {
     }// module 24
 
     public double currentTemp() {
-        return map.getTemp(currentTime());
+        return getTemp(currentTime());
+    }
+
+    public int getTemp(int time) {
+        return temperatures[time];
     }
 
     public boolean move(String cmd) {
@@ -140,7 +151,7 @@ public class Game {
         System.out.println(player);
     }
 
-    public boolean reachTheGoal() {
+    public boolean reachedTheGoal() {
         return map.isGoal(y, x);
     }
 
@@ -156,19 +167,19 @@ public class Game {
         map.erase(y, x);
     }
 
-    public boolean encounterCactus() {
+    public boolean encounteredCactus() {
         return map.isCactus(y, x);
     }
 
-    public boolean encounterBranch() {
+    public boolean encounteredBranch() {
         return map.isBranch(y, x);
     }
 
     public boolean cutCactus() {
         if(player.canCutCactus()) {
-            updateTime();
             player.cutCactus();
             pickup();
+            updateTime();
             return true;
         }
         return false;
@@ -185,8 +196,8 @@ public class Game {
 
     public boolean makeFire() {
         if(player.canMakeFire()) {
-            updateTime();
             player.makeFire();
+            updateTime();
             return true;
         }
         return false;
@@ -203,6 +214,7 @@ public class Game {
     public static void main(String[] args) {
         Game game = new Game();
         Scanner scanner = game.scanner;
+        boolean succeed;
 
         while(true) {
             if(!game.player.isAlive()) {
@@ -214,12 +226,12 @@ public class Game {
                 break;
             }
 
-            if(game.reachTheGoal()) {
+            if(game.reachedTheGoal()) {
                 System.out.println("You WIN");
                 break;
             }
 
-            if(game.encounterBranch() && game.justMoved()) {
+            if(game.encounteredBranch() && game.justMoved()) {
                 System.out.println("Branch found");
                 System.out.println("Pickup(yes) or not(no)?");
                 String input = scanner.nextLine().toUpperCase().trim();
@@ -235,7 +247,7 @@ public class Game {
                 game.updateLocation();
                 continue;
             }
-            if(game.encounterCactus() && game.justMoved()) {
+            if(game.encounteredCactus() && game.justMoved()) {
                 System.out.println("Cactus found");
                 System.out.println("Cut(yes) or not(no)?");
                 String input = scanner.nextLine().toUpperCase().trim();
@@ -260,7 +272,7 @@ public class Game {
                 break;
             }
 
-            boolean succeed = false;
+            succeed = false;
             switch (command) {
                 case "TIME":
                     game.printTime();
