@@ -4,7 +4,7 @@ enum Direction {
 
 public class Tile {
     private String type;
-    private Boolean isMarked = false;
+    private Boolean marked = false;
     private Tile north;
     private Tile south;
     private Tile west;
@@ -17,6 +17,18 @@ public class Tile {
     // Getter and setter methods for category
     public String getType() {
         return type;
+    }
+
+    public Boolean isMarked() {
+        return marked;
+    }
+
+    public void mark() {
+        marked = true;
+    }
+
+    public Boolean isAccessible() {
+        return type.equals("Road");
     }
 
     public Tile getNeighbor(Direction direction) {
