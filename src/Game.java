@@ -15,25 +15,19 @@ public class Game {
     private static final String YES = "YES";
     private static final String NO = "NO";
 
-    private static final int[][] ONE_STEP = {
-            {-1, 0}, // N
-            {1, 0}, // S
-            {0, 1}, // E
-            {0, -1} // W
-    };
-    private static final HashMap<String, Integer> CMD2STEP;
+    private static final HashMap<String, Direction> CMD2STEP;
     static {
         CMD2STEP = new HashMap<>();
-        CMD2STEP.put("N", 0);
-        CMD2STEP.put("S", 1);
-        CMD2STEP.put("E", 2);
-        CMD2STEP.put("W", 3);
+        CMD2STEP.put("N", Direction.NORTH);
+        CMD2STEP.put("S", Direction.SOUTH);
+        CMD2STEP.put("E", Direction.EAST);
+        CMD2STEP.put("W", Direction.WEST);
     }
     private static final int START_TIME = 9; // 9AM clock
     private static final int TOTAL_TIME = 72; // max lasting time of game.
     private int elapse = 0;
-    private int y, x;
-    private int prevY, prevX;
+    private Tile currentLocation;
+    private Tile previousLocation;
 
     private Scanner scanner;
 
@@ -41,7 +35,7 @@ public class Game {
         scanner = new Scanner(System.in);
         map = new Map();
         player = new Player();
-        updateCurLocation(map.startTile[0], map.startTile[1]);
+        updateCurLocation(map.getStartTile());
         updatePrevLocation();
     }
 
@@ -54,24 +48,22 @@ public class Game {
         }
     }
 
-    private void updateCurLocation(int y, int x) {
-        this.y = y;
-        this.x = x;
+    private void updateCurLocation(Tile tile) {
+        currentLocation = tile;
     }
 
     private void updatePrevLocation() {
-        this.prevY = y;
-        this.prevX = x;
+        previousLocation = currentLocation;
     }
 
-    private void updateLocation(int y, int x) {
+    private void updateLocation(Tile tile) {
         markOnMap();
         updatePrevLocation();
-        updateCurLocation(y, x);
+        updateCurLocation(tile);
     }
 
     private void updateLocation() {
-        updateLocation(y, x);
+        updateLocation(currentLocation);
     }
 
     private void updatePlayer() {
@@ -84,7 +76,7 @@ public class Game {
     }
 
     private boolean justMoved() {
-        return y != prevY || x != prevX;
+        return !currentLocation.equals(previousLocation);
     }
 
     public int timeLeft() {
@@ -104,12 +96,12 @@ public class Game {
     }
 
     public boolean move(String cmd) {
-        int direction = CMD2STEP.getOrDefault(cmd, -1);
-        if(direction == -1) return false;
-        int newY = y + ONE_STEP[direction][0];
-        int newX = x + ONE_STEP[direction][1];
-        if(map.isValid(newY, newX) && map.isAccessible(newY, newX)) {
-            if(familiarRoad(newY, newX)) {
+        Direction direction = CMD2STEP.getOrDefault(cmd, null);
+        if(direction == null) return false;
+        Tile newTile = currentLocation.getNeighbor(direction);
+        if(newTile == null) return false;
+        if(newTile.isAccessible()) {
+            if(familiarRoad(newTile)) {
                 System.out.println("Seems you have been there, you sure about this move? type \"yes\" to confirm >");
                 String input = scanner.nextLine().toUpperCase().trim();
                 if(!input.equals(YES)) {
@@ -117,7 +109,7 @@ public class Game {
                 }
             }
             updateTime();
-            updateLocation(newY, newX);
+            updateLocation(newTile);
             return true;
         }
         return false;
@@ -152,27 +144,27 @@ public class Game {
     }
 
     public boolean reachedTheGoal() {
-        return map.isGoal(y, x);
+        return map.isGoal(currentLocation);
     }
 
-    public boolean familiarRoad(int y, int x) {
-        return map.isMarked(y, x);
+    public boolean familiarRoad(Tile tile) {
+        return tile.isMarked();
     }
 
     public void markOnMap() {
-        map.mark(y, x);
+        currentLocation.mark();
     }
 
     public void pickup() {
-        map.erase(y, x);
+        ((Road) currentLocation).erase();
     }
 
     public boolean encounteredCactus() {
-        return map.isCactus(y, x);
+        return ((Road) currentLocation).hasCactus();
     }
 
     public boolean encounteredBranch() {
-        return map.isBranch(y, x);
+        return ((Road) currentLocation).hasBranch();
     }
 
     public boolean cutCactus() {
