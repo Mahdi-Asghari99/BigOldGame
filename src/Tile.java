@@ -4,6 +4,7 @@ enum Direction {
 
 public class Tile {
     private String type;
+    private Boolean isMarked = false;
     private Tile north;
     private Tile south;
     private Tile west;
