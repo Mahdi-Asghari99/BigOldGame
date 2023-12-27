@@ -1,17 +1,29 @@
 public class Road extends Tile{
-    Boolean hasBranch = false;
-    Boolean hasCactus = false;
-    public Road(Boolean hasBranch, Boolean hasCactus) {
+    Boolean branch;
+    Boolean cactus;
+    public Road(Boolean branch, Boolean cactus) {
         super("Road");
-        this.hasBranch = hasBranch;
-        this.hasCactus = hasCactus;
+        this.branch = branch;
+        this.cactus = cactus;
+    }
+
+    public Boolean hasBranch() {
+        return branch;
+    }
+    public Boolean hasCactus() {
+        return cactus;
+    }
+
+    public void erase() {
+        branch = false;
+        cactus = false;
     }
 
     @Override
     public String toString() {
         String out =  "Tile{" + "type=" + getType();
-        if (hasCactus) {out += "perk=has a cactus";}
-        if (hasBranch) {out += "perk=has a branch";}
+        if (hasCactus()) {out += "perk=has a cactus";}
+        if (hasBranch()) {out += "perk=has a branch";}
         out += "}";
         return out;
     }
