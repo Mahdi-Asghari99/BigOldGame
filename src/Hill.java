@@ -1,2 +1,5 @@
-package PACKAGE_NAME;public class Hill {
+public class Hill extends Tile{
+    public Hill () {
+        super("Hill");
+    }
 }
