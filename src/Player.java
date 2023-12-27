@@ -1,7 +1,7 @@
 public class Player {
 
     private static final double BASE_TEMP_LOSS = 0.03;
-    private static final double HOURLY_TEMP_LOSS_INCREASE = 0.02;
+    private static final double BODYTEMP_LOSS_UNIT = 0.02;
     private static final double TEMP_GAIN_UNIT = 0.1;
     private static final double BASE_WATER_LOSS = 0.04;
     private static final double WATER_LOSS_UNIT = 0.01;
@@ -28,7 +28,7 @@ public class Player {
         return water > -0.5 && bodyTemp > 35.0;
     }
 
-    private static boolean isNight(int curTime) {
+    private boolean isNight(int curTime) {
         return curTime >= 21 || curTime <= 8;
     }
 
@@ -40,40 +40,13 @@ public class Player {
 
     private void updateBodyTemp(int time, int temp) {
         if(isNight(time) && temp <= TEMP_THRESHOLD_OF_BODYTEMP_LOSS) {
-            bodyTemp -= (TEMP_THRESHOLD_OF_BODYTEMP_LOSS - temp) * HOURLY_TEMP_LOSS_INCREASE + BASE_TEMP_LOSS;
+            bodyTemp -= (TEMP_THRESHOLD_OF_BODYTEMP_LOSS - temp) * BODYTEMP_LOSS_UNIT + BASE_TEMP_LOSS;
         }
     }
 
-    public boolean canUse(String name) {
-        return bag.gotA(name) && bag.getItem(name).available();
-    }
-
-    public boolean canPickup(String name) {
-        return bag.gotA(name) && bag.getItem(name).notFull();
-    }
-
-    public void pickup(String name) {
-        Item item = getItem(name);
-        item.gain();
-    }
-
-    public void pickup(String name, double amount) {
-        Item item = getItem(name);
-        item.gain(amount);
-    }
-
-    public void consume(String name) {
-        bag.getItem(name).use();
-    }
-
-
-    public Item getItem(String name) {
-        return bag.getItem(name);
-    }
-
-    public double getDurability(String name) {
-        Item item = getItem(name);
-        return item.get();
+    public void updateState(int curTime, int temp) {
+        updateWater(curTime, temp);
+        updateBodyTemp(curTime, temp);
     }
 
     public boolean canMakeFire() {
@@ -108,7 +81,7 @@ public class Player {
 
     public void cutCactus() {
         pickup("Bottle");
-        consume("Knife");
+        useKnife();
     }
 
     public boolean canUseKnife() {
@@ -119,9 +92,35 @@ public class Player {
         consume("Knife");
     }
 
-    public void updateState(int curTime, int temp) {
-        updateWater(curTime, temp);
-        updateBodyTemp(curTime, temp);
+    public void pickup(String name) {
+        Item item = getItem(name);
+        item.gain();
+    }
+
+    public void pickup(String name, double amount) {
+        Item item = getItem(name);
+        item.gain(amount);
+    }
+
+    public void consume(String name) {
+        getItem(name).use();
+    }
+
+    public double getDurability(String name) {
+        Item item = getItem(name);
+        return item.get();
+    }
+
+    public Item getItem(String name) {
+        return bag.getItem(name);
+    }
+
+    public boolean canUse(String name) {
+        return bag.gotA(name) && bag.getItem(name).available();
+    }
+
+    public boolean canPickup(String name) {
+        return bag.gotA(name) && bag.getItem(name).notFull();
     }
 
     @Override

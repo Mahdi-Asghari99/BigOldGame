@@ -13,8 +13,9 @@ public class Knife extends Item{
     }
 
     @Override
+    // Adding gain function for extendability => In the future if we want to sharpen the knife
     public void gain() {
-        return;
+        gain(1);
     }
 
 

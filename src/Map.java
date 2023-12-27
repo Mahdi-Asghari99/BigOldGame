@@ -15,12 +15,7 @@ public class Map {
             {3, 0, 2, 0, 1, 3, 1, 0},
             {1, 1, 1, 1, 1, 2, 0, 0}
     } ;
-    private static final int[] temperatures = {
-            15, 14, 13, 12, 11, 10,
-            11, 12, 15, 16, 18, 26,
-            32, 34, 36, 38, 36, 32,
-            28, 24, 18, 18, 17, 16,
-    }; // 0h to 23h
+
     public int[] startTile = new int[]{0,0};
     public int[] goalTile = new int[]{7,7};
 
@@ -80,10 +75,6 @@ public class Map {
     public boolean isMarked(int y, int x) {
         return footmark.get(y).get(x);
     } // arraylist-footmark's getter
-
-    public int getTemp(int time) {
-        return temperatures[time];
-    }
 
 
     private void createMap() {
