@@ -3,9 +3,7 @@ import java.util.*;
 import java.util.ArrayList;
 
 public class Map {
-    private ArrayList<ArrayList<Integer>> map;
-    private ArrayList<ArrayList<Boolean>> footmark;
-    private static final int[] [] mapArray = { //0: road, 1: hill, 2: branch, 3: cactus
+    private static final int[][] testMapArray = { //0: road, 1: hill, 2: branch, 3: cactus
             {0, 3, 1, 0, 2, 0, 2, 1}, // row 0
             {2, 0, 1, 0, 1, 3, 0, 1},
             {0, 0, 1, 3, 0, 0, 0, 2},
@@ -16,77 +14,65 @@ public class Map {
             {1, 1, 1, 1, 1, 2, 0, 0}
     } ;
 
-    public int[] startTile = new int[]{0,0};
-    public int[] goalTile = new int[]{7,7};
+    private final Tile startTile;
+    private Tile goalTile;
 
-    private int height;
-    private int width;
+    public Map(int[][] mapArray) {
+        startTile = createTileFromArray(mapArray, 0, 0, new Tile[mapArray.length][mapArray[0].length]);
+    }
 
-    /**
-     * constructor:
-     * create a 2D ArrayList
-     */
     public Map() {
-//        tiles = new ArrayList<>();
-        height = mapArray.length;
-        width = mapArray[0].length;
-        map = new ArrayList<>();
-        footmark = new ArrayList<>();
-        createMap();
-
+        this(testMapArray);
     }
 
-    public int get(int y, int x) {
-        return map.get(y).get(x);
-    }
-
-    public void erase(int y, int x) {
-        map.get(y).set(x, 0);
-    }
-
-    public boolean isValid(int y, int x) {
-        return y >= 0 && y < height && x >= 0 && x < width;
-    }
-
-    public boolean isHill(int y, int x) {
-        return get(y, x) == 1;
-    }
-
-    public boolean isAccessible(int y, int x) {
-        return !isHill(y, x);
-    }
-
-    public boolean isBranch(int y, int x) {
-        return get(y, x) == 2;
-    }
-
-    public boolean isCactus(int y, int x) {
-        return get(y, x) == 3;
-    }
-
-    public boolean isGoal(int y, int x) {
-        return y == goalTile[0] && x == goalTile[1];
-    }
-
-    public void mark(int y, int x) { //  arraylist-footmark's setter
-        footmark.get(y).set(x, true); // Y is row, X is column.
-    }
-
-    public boolean isMarked(int y, int x) {
-        return footmark.get(y).get(x);
-    } // arraylist-footmark's getter
-
-
-    private void createMap() {
-        for(int i = 0; i < mapArray.length; i++) {  // i- row - y, j- column - x
-            ArrayList<Integer> row = new ArrayList<>(); // Initialize map from the array.
-            ArrayList<Boolean> fmRow = new ArrayList<>(); //road have been to.
-            for(int j = 0; j < mapArray[0].length; j++) {
-                row.add(mapArray[i][j]);
-                fmRow.add(false);
-            }
-            map.add(row);
-            footmark.add(fmRow);
+    private Tile createTileFromArray(int[][] mapArray, int row, int col, Tile[][] createdTiles) {
+        if (row < 0 || row >= mapArray.length || col < 0 || col >= mapArray[0].length) {
+            // Out of bounds, return null
+            return null;
         }
+
+        if (createdTiles[row][col] != null) {
+            // Tile already created, return the existing tile
+            return createdTiles[row][col];
+        }
+
+        int type = mapArray[row][col];
+        Tile tile = null;
+        switch (type) {
+            case 1:
+                tile = new Hill();
+                break;
+            case 0 :
+                tile = new Road(false, false);
+                break;
+            case 2 :
+                tile = new Road(true, false);
+                break;
+            case 3 :
+                tile = new Road(false, true);
+                break;
+        };
+
+        if (row == mapArray.length-1 && col == mapArray[0].length-1) {
+            goalTile =  tile;
+        }
+
+        createdTiles[row][col] = tile;
+
+        tile.setNeighbor(Direction.NORTH, createTileFromArray(mapArray, row - 1, col, createdTiles));
+        tile.setNeighbor(Direction.SOUTH, createTileFromArray(mapArray, row + 1, col, createdTiles));
+        tile.setNeighbor(Direction.WEST, createTileFromArray(mapArray, row, col - 1, createdTiles));
+        tile.setNeighbor(Direction.EAST, createTileFromArray(mapArray, row, col + 1, createdTiles));
+
+        return tile;
     }
+
+    public Tile getStartTile() {
+        return startTile;
+    }
+
+    public boolean isGoal(Tile tile) {
+        return tile.equals(goalTile);
+    }
+
 }
