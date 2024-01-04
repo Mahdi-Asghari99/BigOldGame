@@ -4,8 +4,7 @@ public class Branch extends Item {
 
     }
 
-    @Override
-    public boolean available() {
+    public boolean availableForFire() {
         return durability >= 4;
     }
 
@@ -14,6 +13,11 @@ public class Branch extends Item {
         durability -= 4;
     }
 
+
+    public Boolean discardBranch(int numBranches) {
+        durability -= numBranches;
+        return true;
+    }
     @Override
     public void gain() {
         gain(1);
