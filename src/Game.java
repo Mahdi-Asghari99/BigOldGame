@@ -135,6 +135,54 @@ public class Game {
         System.out.printf("Time Remain: %d\n", timeLeft());
     }
 
+    public void printHelp() {
+        System.out.println("Alright, alright. You need some help mate!");
+        System.out.println("First of all, you gotta move! But what is moving without thinking?");
+        System.out.println("Through northern chills and southern mists,\n" +
+                "In the west where sunlight barely exists,\n" +
+                "Four letters mark the cardinal quest,\n" +
+                "What must an adventurer do to be blessed?");
+        System.out.println("--------------------------------------");
+        System.out.println("You can Always check the 'Time' if needed. But, can You?");
+        System.out.println("In the maze's heart, where whispers reside,\n" +
+                "You can always check the 'Time' to be your guide.\n" +
+                "But heed this warning in the twists that mock,\n" +
+                "Remember not to lose your ticking clock.");
+        System.out.println("--------------------------------------");
+        System.out.println("Remember to keep an I on your thermometer!");
+        System.out.println("In the icy veins or the fire's spark,\n" +
+                "Measure the elements, embark.\n" +
+                "Beware the twists where phantoms tempt,\n" +
+                "Decipher the puzzle, embrace what is 'Temp'");
+        System.out.println("--------------------------------------");
+        System.out.println("My beloved adventurer, answers are not always outside!");
+        System.out.println("Quoth the maze, with secrets it'll tether,\n" +
+                "Know thyself, through stormy weather.\n" +
+                "Measure the warmth your vessel vents,\n" +
+                "Through 'Player' command, the enigma vents.");
+        System.out.println("--------------------------------------");
+        System.out.println("You can also type 'Status' to check everything!");
+        System.out.println("What? Did you expect another riddle? I don't have time for this. I have better things to do with my life!");
+        System.out.println("--------------------------------------");
+        System.out.println("Just kidding! Ready for another one?");
+        System.out.println("In the labyrinth's shroud, where shadows dance,\n" +
+                "A traveler lost, in a mystic trance.\n" +
+                "When thirst engulfs and chills grow dire,\n" +
+                "Invoke the commands that the maze requires.\n" +
+                "\n" +
+                "\"Quoth the maze, in whispers hushed,\n" +
+                "When 'Drink' you crave, where shadows brushed.\n" +
+                "Let waters flow, in darkness conspire,\n" +
+                "Sip from the abyss, quench the 'Drink' desire.\"\n" +
+                "\n" +
+                "But if the cold bites and frost suspends,\n" +
+                "When the icy breath through the passage wends.\n" +
+                "\"Summon the warmth,\" the maze requires,\n" +
+                "With 'Fire' command, where shadows admire.");
+        System.out.println("--------------------------------------");
+        System.out.println("Now, 'Drop' everything you don't need and let's get the heck out of here! Don't hesitate to ask for 'Help'!");
+    }
+
     public void printTemp() {
         System.out.printf("Curent Temprature: %3.2f\n", currentTemp());
     }
@@ -241,6 +289,7 @@ public class Game {
         Game game = new Game();
         Scanner scanner = game.scanner;
         boolean succeed;
+        game.printHelp();
 
         while(true) {
             if(!game.player.isAlive()) {
@@ -339,6 +388,10 @@ public class Game {
 
                 case "DROP":
                     game.drop();
+                    break;
+
+                case "HELP":
+                    game.printHelp();
                     break;
 
                 default:
