@@ -203,6 +203,40 @@ public class Game {
         return false;
     }
 
+    public void drop() {
+        System.out.print("What to drop? (water bottle, knife, branch: ");
+        String itemToDrop = scanner.nextLine().toUpperCase().trim();
+
+        if (itemToDrop.equals("WATER BOTTLE")) {
+            if (player.hasWaterBottle()) {
+                player.dropWaterBottle();
+                System.out.println("Water bottle dropped.");
+            } else {
+                System.out.println("You don't have a water bottle.");
+            }
+        } else if (itemToDrop.equals("KNIFE")) {
+            if (player.hasKnife()) {
+                player.dropKnife();
+                System.out.println("Knife dropped.");
+            } else {
+                System.out.println("You don't have a knife.");
+            }
+        } else if (itemToDrop.equals("BRANCH")) {
+            System.out.print("How many branches to drop? ");
+            int numBranches = Integer.parseInt(scanner.nextLine());
+
+            if (player.hasBranch() && player.canDropBranch(numBranches)) {
+                player.dropBranch(numBranches);
+                System.out.println(numBranches + " branches dropped.");
+            } else {
+                System.out.println("You don't have enough branches or cannot drop that many branches.");
+            }
+        } else {
+            System.out.println("Invalid item.");
+        }
+    }
+
+
     public static void main(String[] args) {
         Game game = new Game();
         Scanner scanner = game.scanner;
@@ -247,7 +281,7 @@ public class Game {
                     if(game.cutCactus()) {
                         System.out.println("Water gained");
                     } else {
-                        System.out.println("Cannot cut, because knife is damaged or bottle is full");
+                        System.out.println("Cannot cut, because knife is damaged or you do not have a knife or bottle is full or you do not have a bottle.");
                     }
                 } else if(!input.equals(NO)) {
                     game.invalidCommand();
@@ -302,6 +336,11 @@ public class Game {
                         System.out.println("Move didn't happen.");
                     }
                     break;
+
+                case "DROP":
+                    game.drop();
+                    break;
+
                 default:
                     game.invalidCommand();
             }

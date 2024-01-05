@@ -33,4 +33,10 @@ public class Bag {
         return sb.toString();
     }
 
+    public void removeItem(String itemName) {
+        Item item = items.get(itemName);
+        if (item != null && item.available()) {
+            items.remove(itemName);
+        }
+    }
 }

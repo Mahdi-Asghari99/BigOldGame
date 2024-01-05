@@ -50,7 +50,7 @@ public class Player {
     }
 
     public boolean canMakeFire() {
-        return canUse("Branch");
+        return bag.gotA("Branch") && ((Branch)(bag.getItem("Branch"))).availableForFire();
     }
 
     public void makeFire() {
@@ -131,4 +131,60 @@ public class Player {
         sb.append(bag.toString());
         return sb.toString();
     }
+
+
+    public boolean hasWaterBottle() {
+        return bag.gotA("Bottle");
+    }
+
+    public void dropWaterBottle() {
+        bag.removeItem("Bottle");
+    }
+
+    public boolean hasKnife() {
+        return bag.gotA("Knife");
+    }
+
+    public void dropKnife() {
+        bag.removeItem("Knife");
+    }
+
+
+    public boolean canDropBranch(int numBranches) {
+        // several cases: no branches at all, not enough branches, enough branches, illegal input
+        if (numBranches < 0) {
+            System.out.println("Can't drop negative branches.");
+            return false;
+        }
+        // no branches at all
+        if (hasBranch() == false) {
+            System.out.println("No branches at all.");
+            return false;
+        }
+        // not enough branches
+        if (numBranches > getDurability("Branch")) {
+            System.out.println("Not enough branches.");
+            return false;
+        }
+        // enough branches
+        return true;
+    }
+
+    public void dropBranch(int numBranches) {
+        if (!canDropBranch(numBranches)) {
+            throw new RuntimeException("Can't drop " + numBranches + " branches.");
+        }
+        Item branch = getItem("Branch");
+        if (branch.getClass() == Branch.class) {
+            ((Branch)branch).discardBranch(numBranches);
+        } else {
+            throw new RuntimeException("This is not a branch.");
+        }
+    }
+
+    public boolean hasBranch() {
+        return bag.gotA("Branch");
+    }
+
+
 }

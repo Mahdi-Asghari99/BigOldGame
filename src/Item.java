@@ -11,6 +11,7 @@ abstract class Item {
     }
 
     public abstract void use();
+
     public abstract void gain();
 
     public double get() {
@@ -30,6 +31,16 @@ abstract class Item {
 
     @Override
     public String toString() {
-        return String.format("Item: %S, Remaining: %3.2f", name, durability);
+        return String.format("Item: %S, resilience remaining: %3.2f", name, durability);
     }
+
+    public void removeItem() {
+        if (!available()) {
+            throw new RuntimeException("Item not available.");
+        }
+        durability = 0;
+    }
+
+
+
 }
