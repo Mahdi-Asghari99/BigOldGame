@@ -317,7 +317,7 @@ public class Game {
                 case "DRINK":
                     succeed = game.drinkWater();
                     if(!succeed) {
-                        System.out.println("Bottle is empty.");
+                        System.out.println("Bottle is empty, or you don't have a bottle.");
                     } else {
                         System.out.println("Cool, Crisp, Refreshing!");
                     }
