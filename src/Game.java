@@ -181,7 +181,7 @@ public class Game {
                 "With 'Fire' command, where shadows admire.");
         System.out.println("--------------------------------------");
         System.out.println("Now, 'Drop' everything you don't need and let's get the heck out of here! Don't hesitate to ask for 'Help'!");
-        System.out.println("It's better to have a pen and paper to track the road and hill, \n"+"draw a map will make survive easier, just for information.");
+        System.out.println("It's better to have a pen and paper to track the roads and hills, \n"+"Drawing a map will make surviving easier, just for your information!");
     }
 
     public void printTemp() {
